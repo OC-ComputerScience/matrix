@@ -7,14 +7,6 @@ double ts_to_ms(struct timespec* ts) {
     return (((double) ts->tv_sec) * 1000.0) + (((double) ts->tv_nsec) / 1000000.0);
 }
 
-void get_clock(struct timespec* spec) {
-#ifdef __CYGWIN__
-    clock_gettime(CLOCK_MONOTONIC, spec);
-#else
-    clock_gettime(CLOCK_MONOTONIC_RAW, spec);
-#endif
-}
-
 void do_calculation(double** matrix1, double** matrix2, int dim, int single_threaded) {
     if (single_threaded) {
         printf("Performing single-threaded calculation...\n");
@@ -25,9 +17,9 @@ void do_calculation(double** matrix1, double** matrix2, int dim, int single_thre
     struct timespec start;
     struct timespec end;
 
-    get_clock(&start);
+    clock_gettime(CLOCK, &start);
     do_multiply(matrix1, matrix2, dim, single_threaded);
-    get_clock(&end);
+    clock_gettime(CLOCK, &end);
 
     double start_time = ts_to_ms(&start);
     double end_time = ts_to_ms(&end);

@@ -3,6 +3,12 @@
 
 #define NUM_MAX 1000.0
 
+#ifdef __CYGWIN__
+#define CLOCK CLOCK_MONOTONIC
+#else
+#define CLOCK CLOCK_MONOTONIC_RAW
+#endif
+
 /**
  * Generate a new random matrix of the given square dimension
  * @param dim The square dimension to generate the new matrix

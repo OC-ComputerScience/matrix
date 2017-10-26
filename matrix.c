@@ -10,11 +10,7 @@ double** generate_random_matrix(int dim) {
 
     struct timespec ts;
 
-#ifdef __CYGWIN__
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-#else
-    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-#endif
+    clock_gettime(CLOCK, &ts);
 
     srandom((unsigned int) (ts.tv_nsec ^ ts.tv_sec));
 
