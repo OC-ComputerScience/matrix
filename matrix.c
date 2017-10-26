@@ -7,9 +7,11 @@
 double** generate_random_matrix(int dim) {
     printf("Generating matrix (%i x %i)...\n", dim, dim);
     double** result = create_matrix(dim);
+    if (result == NULL) {
+        return NULL;
+    }
 
     struct timespec ts;
-
     clock_gettime(CLOCK, &ts);
 
     srandom((unsigned int) (ts.tv_nsec ^ ts.tv_sec));
@@ -26,9 +28,17 @@ double** generate_random_matrix(int dim) {
 
 void do_multiply(double** matrix1, double** matrix2, int dim, int single_threaded) {
     double** result = create_matrix(dim);
+    if (result == NULL) {
+        printf("Failed to allocate result matrix\n");
+        exit(0);
+    }
 
     printf("Transposing right matrix...\n");
     double** transposed = transpose(matrix2, dim);
+    if (transposed == NULL) {
+        printf("Failed to allocate transpose matrix\n");
+        exit(0);
+    }
 
     printf("Multiplying matrices...\n");
 
@@ -59,13 +69,11 @@ void do_multiply(double** matrix1, double** matrix2, int dim, int single_threade
     free_matrix(result, dim);
 }
 
-void get_matrices(double ***matrix1, double ***matrix2, int dim) {
-    *matrix1 = generate_random_matrix(dim);
-    *matrix2 = generate_random_matrix(dim);
-}
-
 double** transpose(double** matrix, int dim) {
     double** result = create_matrix(dim);
+    if (result == NULL) {
+        return NULL;
+    }
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; ++j) {
             result[j][i] = matrix[i][j];
@@ -76,16 +84,25 @@ double** transpose(double** matrix, int dim) {
 
 double** create_matrix(int dim) {
     double** result = malloc(sizeof(double*) * dim);
+    if (result == NULL) {
+        return NULL;
+    }
     // initialize result matrix
     for (int i = 0; i < dim; ++i) {
         result[i] = malloc(sizeof(double) * dim);
+        if (result[i] == NULL) {
+            free_matrix(result, dim);
+            return NULL;
+        }
     }
     return result;
 }
 
 void free_matrix(double** matrix, int dim) {
-    for (int i = 0; i < dim; ++i) {
-        free(matrix[i]);
+    if (matrix != NULL) {
+        for (int i = 0; i < dim; ++i) {
+            free(matrix[i]);
+        }
     }
     free(matrix);
 }

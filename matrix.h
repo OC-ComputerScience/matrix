@@ -26,14 +26,6 @@ double** generate_random_matrix(int dim);
 void do_multiply(double** matrix1, double** matrix2, int dim, int single_threaded);
 
 /**
- * Given two pointers to unallocated matrices, generate the two matrices based on the given dimension.
- * @param matrix1 Pointer to the first unallocated matrix
- * @param matrix2 Pointer to the second unallocated matrix
- * @param dim The (square) dimension to generate the matrices
- */
-void get_matrices(double ***matrix1, double ***matrix2, int dim);
-
-/**
  * Return a transpose of the given matrix
  * @param matrix The matrix to transpose
  * @param dim The dimension of the given matrix

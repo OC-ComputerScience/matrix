@@ -42,26 +42,18 @@ int main(int arg_c, const char** arg_v) {
         dim = (int) strtol(arg_v[1], NULL, 10);
     }
 
-    double** matrix1 = NULL;
-    double** matrix2 = NULL;
-    get_matrices(&matrix1, &matrix2, dim);
+    double** matrix1 = generate_random_matrix(dim);
+    if (matrix1 == NULL) {
+        printf("Failed to allocate matrix\n");
+        return 0;
+    }
+    double** matrix2 = generate_random_matrix(dim);
+    if (matrix2 == NULL) {
+        printf("Failed to allocate matrix\n");
+        return 0;
+    }
 
     printf("\n");
-
-    if (matrix1 == NULL) {
-        if (matrix2 != NULL) {
-            free_matrix(matrix2, dim);
-        }
-        printf("Failed generating matrix\n");
-        return 0;
-    }
-    if (matrix2 == NULL) {
-        if (matrix1 != NULL) {
-            free_matrix(matrix1, dim);
-        }
-        printf("Failed generating matrix\n");
-        return 0;
-    }
 
     // single-threaded
     do_calculation(matrix1, matrix2, dim, 0);
